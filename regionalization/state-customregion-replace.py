@@ -1,0 +1,212 @@
+# Lambodhar Damdoaran
+# Replace state names that are cities/regions with proper state and state with custom region
+
+import sys
+import pandas as pd 
+
+
+data = input("Enter tsv file: ")
+df = pd.read_csv(data, sep='\t')
+
+
+US_city_state = { 'Boston' : 'Massachusetts',
+'San_Diego' : 'California',
+'Chicago' : 'Illinois',
+'Santa_Clara' : 'California',
+'Houston' : 'Texas',
+'Rochester' : 'New_York',
+'Gainesville' : 'Florida',
+'NC' : 'North_Carolina',
+'Bethesda' : 'Maryland',
+'Baltimore' : 'Maryland',
+'New_York_City' : 'New_York',
+'Rochester' : 'New_York',
+'Ann_Arbor' : 'Michigan',
+'SouthCarolina' : 'South_Carolina',
+'District_Of_Columbia' : 'District_of_Columbia',
+'NEW_YORK' : 'New_York'
+}
+
+
+US_census_regions = { 'New_York' : 'Middle_Atlantic',
+'Tennessee' : 'East_South_Central',
+'Texas' : 'West_South_Central',
+'West_Virginia' : 'South_Atlantic',
+'Colorado' : 'Mountain',
+'Oklahoma' : 'West_South_Central',
+'California' : 'Pacific',
+'Wyoming' : 'Mountain',
+'Wisconsin' : 'East_North_Central',
+'Washington' : 'Pacific',
+'Ohio' : 'East_North_Central',
+'Pennsylvania' : 'Middle_Atlantic',
+'Maryland' : 'South_Atlantic',
+'Hawaii' : 'Pacific',
+'Florida' : 'South_Atlantic',
+'New_Mexico' : 'Mountain',
+'New_Jersey' : 'Middle_Atlantic',
+'Illinois' : 'East_North_Central',
+'Kentucky' : 'East_South_Central',
+'North_Carolina' : 'South_Atlantic',
+'South_Dakota' : 'West_North_Central',
+'Idaho' : 'Mountain',
+'Indiana' : 'East_North_Central',
+'Vermont' : 'New_England',
+'Missouri' : 'West_North_Central',
+'Minnesota' : 'West_North_Central',
+'Mississippi' : 'East_South_Central',
+'South_Carolina' : 'South_Atlantic',
+'Alabama' : 'East_South_Central',
+'Virginia' : 'South_Atlantic',
+'Massachusetts' : 'New_England',
+'Alaska' : 'Pacific',
+'Delaware' : 'South_Atlantic',
+'Michigan' : 'East_North_Central',
+'Rhode_Island' : 'New_England',
+'Arkansas' : 'West_South_Central',
+'Georgia' : 'South_Atlantic',
+'Montana' : 'Mountain',
+'Nevada' : 'Mountain',
+'Arizona' : 'Mountain',
+'Louisiana' : 'West_South_Central',
+'Nebraska' : 'West_North_Central',
+'Oregon' : 'Pacific',
+'Iowa' : 'West_North_Central',
+'North_Dakota' : 'West_North_Central',
+'New_Hampshire' : 'New_England',
+'Kansas' : 'West_North_Central',
+'Utah' : 'Mountain',
+'Connecticut' : 'New_England',
+'Maine' : 'New_England',
+'District_of_Columbia' : 'South_Atlantic',
+'Palau' : 'Pacific',
+'American_Samoa' : 'Pacific'
+
+}
+
+
+
+state_louvain1 = { 'Alabama' : 'Cluster1',
+'Alaska' : 'Cluster3',
+'Arizona' : 'Cluster3',
+'Arkansas' : 'Cluster1',
+'California' : 'Cluster3',
+'Colorado' : 'Cluster3',
+'Connecticut' : 'Cluster2',
+'Delaware' : 'Cluster2',
+'Florida' : 'Cluster1',
+'Georgia' : 'Cluster1',
+'Hawaii' : 'Cluster3',
+'Idaho' : 'Cluster3',
+'Illinois' : 'Cluster2',
+'Indiana' : 'Cluster2',
+'Iowa' : 'Cluster3',
+'Kansas' : 'Cluster3',
+'Kentucky' : 'Cluster2',
+'Louisiana' : 'Cluster1',
+'Maine' : 'Cluster2',
+'Maryland' : 'Cluster2',
+'Massachusetts' : 'Cluster2',
+'Michigan' : 'Cluster2',
+'Minnesota' : 'Cluster3',
+'Mississippi' : 'Cluster1',
+'Missouri' : 'Cluster1',
+'Montana' : 'Cluster3',
+'Nebraska' : 'Cluster3',
+'Nevada' : 'Cluster3',
+'New_Hampshire' : 'Cluster2',
+'New_Jersey' : 'Cluster2',
+'New_Mexico' : 'Cluster3',
+'New_York' : 'Cluster2',
+'North_Carolina' : 'Cluster2',
+'North_Dakota' : 'Cluster3',
+'Ohio' : 'Cluster2',
+'Oklahoma' : 'Cluster1',
+'Oregon' : 'Cluster3',
+'Pennsylvania' : 'Cluster2',
+'Rhode_Island' : 'Cluster2',
+'South_Carolina' : 'Cluster2',
+'South_Dakota' : 'Cluster3',
+'Tennessee' : 'Cluster2',
+'Texas' : 'Cluster1',
+'Utah' : 'Cluster3',
+'Vermont' : 'Cluster2',
+'West_Virginia' : 'Cluster2',
+'Virginia' : 'Cluster2',
+'Washington' : 'Cluster3',
+'Wisconsin' : 'Cluster3',
+'Wyoming' : 'Cluster3',
+'District_of_Columbia' : 'Cluster2',
+'Palau' : 'Cluster3',
+'American_Samoa' : 'Cluster3'
+}
+
+state_louvain2 = { 'Alabama' : 'Cluster1',
+'Alaska' : 'Cluster6',
+'Arizona' : 'Cluster6',
+'Arkansas' : 'Cluster2',
+'California' : 'Cluster6',
+'Colorado' : 'Cluster7',
+'Connecticut' : 'Cluster4',
+'Delaware' : 'Cluster5',
+'Florida' : 'Cluster1',
+'Georgia' : 'Cluster1',
+'Hawaii' : 'Cluster6',
+'Idaho' : 'Cluster6',
+'Illinois' : 'Cluster3',
+'Indiana' : 'Cluster3',
+'Iowa' : 'Cluster7',
+'Kansas' : 'Cluster7',
+'Kentucky' : 'Cluster3',
+'Louisiana' : 'Cluster1',
+'Maine' : 'Cluster4',
+'Maryland' : 'Cluster5',
+'Massachusetts' : 'Cluster4',
+'Michigan' : 'Cluster3',
+'Minnesota' : 'Cluster7',
+'Mississippi' : 'Cluster1',
+'Missouri' : 'Cluster2',
+'Montana' : 'Cluster6',
+'Nebraska' : 'Cluster7',
+'Nevada' : 'Cluster6',
+'New_Hampshire' : 'Cluster4',
+'New_Jersey' : 'Cluster5',
+'New_Mexico' : 'Cluster6',
+'New_York' : 'Cluster5',
+'North_Carolina' : 'Cluster5',
+'North_Dakota' : 'Cluster7',
+'Ohio' : 'Cluster3',
+'Oklahoma' : 'Cluster2',
+'Oregon' : 'Cluster6',
+'Pennsylvania' : 'Cluster5',
+'Rhode_Island' : 'Cluster4',
+'South_Carolina' : 'Cluster5',
+'South_Dakota' : 'Cluster7',
+'Tennessee' : 'Cluster3',
+'Texas' : 'Cluster2',
+'Utah' : 'Cluster6',
+'Vermont' : 'Cluster4',
+'West_Virginia' : 'Cluster3',
+'Virginia' : 'Cluster3',
+'Washington' : 'Cluster6',
+'Wisconsin' : 'Cluster7',
+'Wyoming' : 'Cluster6',
+'District_of_Columbia' : 'Cluster5',
+'Palau' : 'Cluster6',
+'American_Samoa' : 'Cluster6'
+}
+
+
+df['State2'] = df['State']
+df['State2'].replace(US_city_state, inplace=True, regex=True)
+df['Division'] = df['State2']
+
+df['Division'].replace(US_census_regions, inplace=True, regex=True)
+
+df['Regionalization-Louvain1'] = df['State2']
+df['Regionalization-Louvain2'] = df['State2']
+
+df['Regionalization-Louvain1'].replace(state_louvain1, inplace=True, regex=True)
+df['Regionalization-Louvain2'].replace(state_louvain2, inplace=True, regex=True)
+
+df.to_csv('out.tsv', sep = '\t')
